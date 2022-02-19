@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
 import client from "../database";
+import dotenv from "dotenv";
 
+dotenv.config()
 
 const salt_rounds = Number(process.env.SALT_ROUNDS)
 

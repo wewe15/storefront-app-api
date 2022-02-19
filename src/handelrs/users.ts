@@ -5,8 +5,8 @@ const store = new UserStore();
   
 
 const index = async (_req: Request, res: Response) => {
-  const users = await store.index();
-  res.json(users);
+    const users = await store.index();
+    res.json(users);
 }
 
 const show = async (req: Request, res: Response) => {
