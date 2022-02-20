@@ -1,5 +1,6 @@
 import client from "../database";
 
+
 export type Product = {
     id: string;
     name: string;
@@ -29,7 +30,7 @@ export class ProductStore {
 
             return result.rows[0]
         } catch (err) {
-            throw new Error(`Could not find user ${id}. Error: ${err}`)
+            throw new Error(`Could not find product ${id}. Error: ${err}`)
         }
     }
 
@@ -57,7 +58,7 @@ export class ProductStore {
         
             return product
         } catch (err) {
-            throw new Error(`Could not delete user ${id}. Error: ${err}`)
+            throw new Error(`Could not delete product ${id}. Error: ${err}`)
         }
     }
 }
