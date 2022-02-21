@@ -4,20 +4,24 @@ import dotenv from "dotenv";
 
 dotenv.config()
 
-const salt_rounds = Number(process.env.SALT_ROUNDS)
+const hashPassword = (password: string) => {
+    const salt_rounds = Number(process.env.SALT_ROUNDS)
+    return bcrypt.hashSync(`${password}`, salt_rounds);
+}
 
 export type User = {
     id: string;
+    username: string;
     firstName: string;
     lastName: string;
     password: string
 }
 
-export class UserStore {
+export class UserModel {
     async index(): Promise<User[]> {
         try {
             const conn = await client.connect()
-            const sql = 'SELECT * FROM users'
+            const sql = 'SELECT username, firstName, lastName FROM users'
             const result = await conn.query(sql)
             conn.release()
 
@@ -29,7 +33,7 @@ export class UserStore {
 
     async show(id: string): Promise<User> {
         try {
-            const sql = 'SELECT * FROM users WHERE id=$1'
+            const sql = 'SELECT username, firstName, lastName FROM users WHERE id=$1'
             const conn = await client.connect()
             const result = await conn.query(sql, [id])
             conn.release()
@@ -40,34 +44,34 @@ export class UserStore {
         }
     }
 
-    async create(b: User): Promise<User> {
+    async create(u: User): Promise<User> {
         try {
-            const hashPassword = await bcrypt.hash(b.password, salt_rounds)
-            const sql = 'INSERT INTO users (firstName, lastName, password) VALUES($1, $2, $3) RETURNING *'
+            const sql = 'INSERT INTO users (username, firstName, lastName, password) VALUES($1, $2, $3, $4)\
+                         RETURNING username, firstName, lastName'
             const conn = await client.connect()
             const result = await conn
-                .query(sql, [b.firstName, b.lastName, hashPassword])
+                .query(sql, [u.username, u.firstName, u.lastName, hashPassword(u.password)])
             const user = result.rows[0]
             conn.release()
 
             return user
         } catch (err) {
-            throw new Error(`Could not add new user ${b.firstName}. Error: ${err}`)
+            throw new Error(`Could not add new user ${u.username}. Error: ${err}`)
         }
     }
 
-    async update(b:User, hash?: boolean): Promise<User>{
-        if (hash) b.password = await bcrypt.hash(b.password, salt_rounds);
+    async update(u:User, hash?: boolean): Promise<User>{
         try{
-            const sql = 'UPDATE users SET firstName=$1, lastName=$2, password=$3 WHERE id=$1'
+            const sql = 'UPDATE users SET username=$5, firstName=$1, lastName=$2, password=$3 WHERE id=$1 \
+                         RETURNING username, firstName, lastName'
             const conn = await client.connect()
-            const result = await conn.query(sql, [b.firstName, b.lastName, b.password])
+            const result = await conn.query(sql, [u.username,u.firstName, u.lastName, hashPassword(u.password)])
             const user = result.rows[0]
             conn.release()
     
             return user
         } catch (err) {
-            throw new Error(`Could not update user ${b.firstName}. Error: ${err}`)
+            throw new Error(`Could not update user ${u.username}. Error: ${err}`)
         }
        
     }
@@ -85,4 +89,24 @@ export class UserStore {
             throw new Error(`Could not delete user ${id}. Error: ${err}`)
         }
     }
-  }
+
+    async authenticate(username: string, password: string): Promise<User | null>{
+        try{
+            const conn = await client.connect();
+            const sql = 'SELECT password FROM users WHERE username=$1';
+            const result = await conn.query(sql, [username]);
+            if (result.rows.length) {
+                const {password: hashPassword} = result.rows[0];
+                const isValid = bcrypt.compareSync(`${password}`, hashPassword);
+                if (isValid){
+                    const userInfo = await conn.query('SELECT * FROM users WHERE username=$1', [username])
+                    return userInfo.rows[0];
+                }
+            }
+            conn.release();
+            return null;
+        } catch (err) {
+            throw new Error(`Could not to login. Error: ${err}`);
+        }
+    }
+}

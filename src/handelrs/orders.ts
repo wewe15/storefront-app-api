@@ -1,8 +1,8 @@
 import express, {Request, Response} from "express";
-import { Order, OrderProduct ,OrderStore } from "../models/orders";
+import { Order, OrderProduct ,OrderModel } from "../models/orders";
 
 
-const store = new OrderStore();
+const store = new OrderModel();
 
 const index = async (_req: Request, res: Response) => {
     const orders = await store.index()

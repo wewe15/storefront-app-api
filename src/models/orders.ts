@@ -14,7 +14,7 @@ export type Order = {
     products: OrderProduct[];
 }
 
-export class OrderStore {
+export class OrderModel {
     async index(): Promise<Order[]> {
         try {
             const conn = await client.connect()
