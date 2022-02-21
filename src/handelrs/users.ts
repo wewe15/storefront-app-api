@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express'
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { User, UserModel } from '../models/users'
+import { User, UserModel } from '../models/users';
+import validateToken from '../middlewares/authentication'
 
 dotenv.config()
 const store = new UserModel();
@@ -58,10 +59,10 @@ const destroy = async (req: Request, res: Response) => {
 }
 
 const userRoutes = (app: express.Application) => {
-    app.get('/users', index)
-    app.get('/users/:id', show)
-    app.post('/users', create)
-    app.delete('/users', destroy)
+    app.get('/users', validateToken, index)
+    app.get('/users/:id',validateToken, show)
+    app.post('/users',validateToken,  create)
+    app.delete('/users',validateToken, destroy)
     app.post('/users/authenticate', authenticate)
 }
 

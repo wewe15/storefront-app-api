@@ -1,5 +1,6 @@
 import express, {Request, Response} from "express";
 import { Order, OrderProduct ,OrderModel } from "../models/orders";
+import validateToken from '../middlewares/authentication';
 
 
 const store = new OrderModel();
@@ -51,9 +52,9 @@ const destroy = async (req: Request, res: Response) => {
 const OrderRoutes = (app: express.Application) => {
     app.get('/orders', index)
     app.get('orders/:id', show)
-    app.post('/orders', create)
-    app.post('/orders/:id/products', addProduct)
-    app.delete('/orders', destroy)
+    app.post('/orders',validateToken ,create)
+    app.post('/orders/:id/products', validateToken, addProduct)
+    app.delete('/orders', validateToken, destroy)
 }
 
 export default OrderRoutes;

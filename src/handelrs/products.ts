@@ -1,5 +1,6 @@
 import express, {Request, Response} from "express";
 import { Product, ProductModel } from "../models/products";
+import validateToken from '../middlewares/authentication'
 
 
 const store = new ProductModel();
@@ -37,8 +38,8 @@ const destroy = async (req: Request, res: Response) => {
 const productRoutes = (app: express.Application) => {
     app.get('/products', index)
     app.get('/products/:id', show)
-    app.post('/products', create)
-    app.delete('/products', destroy)
+    app.post('/products',validateToken ,create)
+    app.delete('/products', validateToken, destroy)
 }
 
 export default productRoutes;
