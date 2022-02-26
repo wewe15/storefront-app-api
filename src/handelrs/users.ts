@@ -23,8 +23,8 @@ const create = async (req: Request, res: Response) => {
         const user: User = {
             id: req.body.id,
             username: req.body.username,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
             password: req.body.password,
         }
 
@@ -46,7 +46,7 @@ const authenticate = async (req: Request, res: Response) => {
        if(!user){
            return res.status(401).json({status: 'error', message: 'the username or password do not match.'})
        }
-       res.json(token);
+       res.json({...user, token});
     } catch (err){
         res.status(400);
         res.json(err);
@@ -61,7 +61,7 @@ const destroy = async (req: Request, res: Response) => {
 const userRoutes = (app: express.Application) => {
     app.get('/users', validateToken, index)
     app.get('/users/:id',validateToken, show)
-    app.post('/users',validateToken,  create)
+    app.post('/users',  create)
     app.delete('/users',validateToken, destroy)
     app.post('/users/authenticate', authenticate)
 }

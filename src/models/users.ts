@@ -12,8 +12,8 @@ const hashPassword = (password: string) => {
 export type User = {
     id: string;
     username: string;
-    firstName: string;
-    lastName: string;
+    firstname: string;
+    lastname: string;
     password: string
 }
 
@@ -21,7 +21,7 @@ export class UserModel {
     async index(): Promise<User[]> {
         try {
             const conn = await client.connect()
-            const sql = 'SELECT username, firstName, lastName FROM users'
+            const sql = 'SELECT username, firstname, lastname, id FROM users'
             const result = await conn.query(sql)
             conn.release()
 
@@ -33,7 +33,7 @@ export class UserModel {
 
     async show(id: string): Promise<User> {
         try {
-            const sql = 'SELECT username, firstName, lastName FROM users WHERE id=$1'
+            const sql = 'SELECT username, firstname, lastname, id FROM users WHERE id=$1'
             const conn = await client.connect()
             const result = await conn.query(sql, [id])
             conn.release()
@@ -46,11 +46,11 @@ export class UserModel {
 
     async create(u: User): Promise<User> {
         try {
-            const sql = 'INSERT INTO users (username, firstName, lastName, password) VALUES($1, $2, $3, $4)\
-                         RETURNING username, firstName, lastName'
+            const sql = 'INSERT INTO users (username, firstname, lastname, password) VALUES($1, $2, $3, $4)\
+                         RETURNING username, firstname, lastname, id'
             const conn = await client.connect()
             const result = await conn
-                .query(sql, [u.username, u.firstName, u.lastName, hashPassword(u.password)])
+                .query(sql, [u.username, u.firstname, u.lastname, hashPassword(u.password)])
             const user = result.rows[0]
             conn.release()
 
@@ -62,10 +62,10 @@ export class UserModel {
 
     async update(u:User, hash?: boolean): Promise<User>{
         try{
-            const sql = 'UPDATE users SET username=$5, firstName=$1, lastName=$2, password=$3 WHERE id=$1 \
-                         RETURNING username, firstName, lastName'
+            const sql = 'UPDATE users SET username=$5, firstname=$1, lastname=$2, password=$3 WHERE id=$1 \
+                         RETURNING username, firstname, lastname, id'
             const conn = await client.connect()
-            const result = await conn.query(sql, [u.username,u.firstName, u.lastName, hashPassword(u.password)])
+            const result = await conn.query(sql, [u.username,u.firstname, u.lastname, hashPassword(u.password)])
             const user = result.rows[0]
             conn.release()
     
@@ -99,7 +99,7 @@ export class UserModel {
                 const {password: hashPassword} = result.rows[0];
                 const isValid = bcrypt.compareSync(`${password}`, hashPassword);
                 if (isValid){
-                    const userInfo = await conn.query('SELECT * FROM users WHERE username=$1', [username])
+                    const userInfo = await conn.query('SELECT id, username, firstname, lastname FROM users WHERE username=$1', [username])
                     return userInfo.rows[0];
                 }
             }
