@@ -78,7 +78,7 @@ export class UserModel {
 
     async delete(id: string): Promise<User> {
         try {
-            const sql = 'DELETE FROM users WHERE id=$1 RETURNING *'
+            const sql = 'DELETE FROM users WHERE id=$1 RETURNING id, username, firstname, lastname'
             const conn = await client.connect()
             const result = await conn.query(sql, [id])
             const user = result.rows[0]

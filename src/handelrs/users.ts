@@ -14,7 +14,7 @@ const index = async (_req: Request, res: Response) => {
 }
 
 const show = async (req: Request, res: Response) => {
-   const user = await store.show(req.body.id);
+   const user = await store.show(req.params.id);
    res.json(user);
 }
 
@@ -54,7 +54,7 @@ const authenticate = async (req: Request, res: Response) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-    const deleted = await store.delete(req.body.id);
+    const deleted = await store.delete(req.params.id);
     res.json(deleted);
 }
 
@@ -62,7 +62,7 @@ const userRoutes = (app: express.Application) => {
     app.get('/users', validateToken, index)
     app.get('/users/:id',validateToken, show)
     app.post('/users',  create)
-    app.delete('/users',validateToken, destroy)
+    app.delete('/users/:id',validateToken, destroy)
     app.post('/users/authenticate', authenticate)
 }
 

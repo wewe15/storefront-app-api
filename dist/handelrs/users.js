@@ -14,7 +14,7 @@ const index = async (_req, res) => {
     res.json(users);
 };
 const show = async (req, res) => {
-    const user = await store.show(req.body.id);
+    const user = await store.show(req.params.id);
     res.json(user);
 };
 const create = async (req, res) => {
@@ -51,14 +51,14 @@ const authenticate = async (req, res) => {
     }
 };
 const destroy = async (req, res) => {
-    const deleted = await store.delete(req.body.id);
+    const deleted = await store.delete(req.params.id);
     res.json(deleted);
 };
 const userRoutes = (app) => {
     app.get('/users', authentication_1.default, index);
     app.get('/users/:id', authentication_1.default, show);
     app.post('/users', create);
-    app.delete('/users', authentication_1.default, destroy);
+    app.delete('/users/:id', authentication_1.default, destroy);
     app.post('/users/authenticate', authenticate);
 };
 exports.default = userRoutes;
