@@ -11,7 +11,7 @@ const index = async (_req: Request, res: Response) => {
 }
 
 const show = async (req: Request, res: Response) => {
-    const order = await store.show(req.body.id)
+    const order = await store.show(req.params.id)
     res.json(order)
 }
 
@@ -45,7 +45,7 @@ const addProduct = async (req: Request, res: Response) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-    const deleted = await store.delete(req.body.id)
+    const deleted = await store.delete(req.params.id)
     res.json(deleted)
 }
 
@@ -54,7 +54,7 @@ const OrderRoutes = (app: express.Application) => {
     app.get('orders/:id', show)
     app.post('/orders',validateToken ,create)
     app.post('/orders/:id/products', validateToken, addProduct)
-    app.delete('/orders', validateToken, destroy)
+    app.delete('/orders/:id', validateToken, destroy)
 }
 
 export default OrderRoutes;

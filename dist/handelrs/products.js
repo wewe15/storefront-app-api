@@ -11,7 +11,7 @@ const index = async (_req, res) => {
     res.json(products);
 };
 const show = async (req, res) => {
-    const product = await store.show(req.body.id);
+    const product = await store.show(req.params.id);
     res.json(product);
 };
 const create = async (req, res) => {
@@ -30,13 +30,13 @@ const create = async (req, res) => {
     }
 };
 const destroy = async (req, res) => {
-    const deleted = await store.delete(req.body.id);
+    const deleted = await store.delete(req.params.id);
     res.json(deleted);
 };
 const productRoutes = (app) => {
     app.get('/products', index);
     app.get('/products/:id', show);
     app.post('/products', authentication_1.default, create);
-    app.delete('/products', authentication_1.default, destroy);
+    app.delete('/products/:id', authentication_1.default, destroy);
 };
 exports.default = productRoutes;

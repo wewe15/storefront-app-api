@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const users_1 = require("../models/users");
 const database_1 = __importDefault(require("../database"));
 const userModel = new users_1.UserModel();
-describe('Test for user modle', () => {
+describe('Test for user model', () => {
     it('should have an authenticate user method', () => {
         expect(userModel.authenticate).toBeDefined();
     });

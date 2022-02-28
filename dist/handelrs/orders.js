@@ -11,7 +11,7 @@ const index = async (_req, res) => {
     res.json(orders);
 };
 const show = async (req, res) => {
-    const order = await store.show(req.body.id);
+    const order = await store.show(req.params.id);
     res.json(order);
 };
 const create = async (req, res) => {
@@ -44,7 +44,7 @@ const addProduct = async (req, res) => {
     }
 };
 const destroy = async (req, res) => {
-    const deleted = await store.delete(req.body.id);
+    const deleted = await store.delete(req.params.id);
     res.json(deleted);
 };
 const OrderRoutes = (app) => {
@@ -52,6 +52,6 @@ const OrderRoutes = (app) => {
     app.get('orders/:id', show);
     app.post('/orders', authentication_1.default, create);
     app.post('/orders/:id/products', authentication_1.default, addProduct);
-    app.delete('/orders', authentication_1.default, destroy);
+    app.delete('/orders/:id', authentication_1.default, destroy);
 };
 exports.default = OrderRoutes;

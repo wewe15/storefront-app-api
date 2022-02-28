@@ -4,7 +4,7 @@ import client from "../database";
 
 const userModel = new UserModel();
 
-describe('Test for user modle', () => {
+describe('Test for user model', () => {
     it('should have an authenticate user method', () => {
         expect(userModel.authenticate).toBeDefined();
     });
