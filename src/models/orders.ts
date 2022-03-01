@@ -2,8 +2,9 @@ import client from "../database";
 
 
 export type OrderProduct = {
-    order_id?: string;
-    product_id?: string;
+    id: string;
+    order_id: string;
+    product_id: string;
     quantity: number;
 }
 
@@ -11,7 +12,6 @@ export type Order = {
     id: string;
     status: string;
     user_id: string;
-    products: OrderProduct[];
 }
 
 export class OrderModel {
@@ -69,7 +69,7 @@ export class OrderModel {
         }
     }
 
-    async addProduct(o: OrderProduct): Promise<Order>{
+    async addProduct(o: OrderProduct): Promise<OrderProduct>{
         try {
             const conn = await client.connect()
             const sql = 'INSERT INTO order_products (quantity, order_id, product_id) VALUES ($1, $2, $3) RETURNING *'

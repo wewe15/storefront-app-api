@@ -21,7 +21,6 @@ const create = async (req: Request, res: Response) => {
             id: req.body.id,
             user_id: req.body.user_id,
             status: req.body.status,
-            products: req.body.products
         }
         const newOrder = await store.create(order)
         res.json(newOrder)
@@ -33,6 +32,7 @@ const create = async (req: Request, res: Response) => {
 const addProduct = async (req: Request, res: Response) => {
     try{
         const orderProduct : OrderProduct = {
+            id: req.body.id,
             order_id: req.params.id,
             product_id: req.body.product_id,
             quantity: parseInt(req.body.quantity)
@@ -51,7 +51,7 @@ const destroy = async (req: Request, res: Response) => {
 
 const OrderRoutes = (app: express.Application) => {
     app.get('/orders', index)
-    app.get('orders/:id', show)
+    app.get('/orders/:id', show)
     app.post('/orders',validateToken ,create)
     app.post('/orders/:id/products', validateToken, addProduct)
     app.delete('/orders/:id', validateToken, destroy)
