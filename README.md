@@ -22,12 +22,12 @@ npm install
 
 First, create a .env file with all the required environment variables:
 
-POSTGRES_PASSWORD="password"
-POSTGRES_USER="postgres"
-POSTGRES_DB="books"
-DATABASE_URL="postgresql://postgres:password@localhost:5432/books"
-SALT_ROUNDS="10"
-JWT_SECRET="thisistopsecret"
+- POSTGRES_PASSWORD="password"
+- POSTGRES_USER="postgres"
+- POSTGRES_DB="books"
+- DATABASE_URL="postgresql://postgres:password@localhost:5432/books"
+- SALT_ROUNDS="10"
+- JWT_SECRET="thisistopsecret"
 
 Next, start the Postgres server on Docker:
 
