@@ -1,54 +1,65 @@
-# Storefront Backend Project
+# Storefront API
 
 ## Getting Started
 
-This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-## Required Technologies
-Your application must make use of the following libraries:
-- Postgres for the database
-- Node/Express for the application logic
-- dotenv from npm for managing environment variables
-- db-migrate from npm for migrations
-- jsonwebtoken from npm for working with JWTs
-- jasmine from npm for testing
+## Prerequisites
 
-## Steps to Completion
+You need the following modules and dependencies installed to run this project:
 
-### 1. Plan to Meet Requirements
+- docker-compose # To run the Postgres database on Docker
+- node # To run the application
+- npm # For dependency management
 
-In this repo there is a `REQUIREMENTS.md` document which outlines what this API needs to supply for the frontend, as well as the agreed upon data shapes to be passed between front and backend. This is much like a document you might come across in real life when building or extending an API. 
+## Installing
 
-Your first task is to read the requirements and update the document with the following:
-- Determine the RESTful route for each endpoint listed. Add the RESTful route and HTTP verb to the document so that the frontend developer can begin to build their fetch requests.    
-**Example**: A SHOW route: 'blogs/:id' [GET] 
+Simply, run the following command to install the project dependencies:
 
-- Design the Postgres database tables based off the data shape requirements. Add to the requirements document the database tables and columns being sure to mark foreign keys.   
-**Example**: You can format this however you like but these types of information should be provided
-Table: Books (id:varchar, title:varchar, author:varchar, published_year:varchar, publisher_id:string[foreign key to publishers table], pages:number)
+npm install
 
-**NOTE** It is important to remember that there might not be a one to one ratio between data shapes and database tables. Data shapes only outline the structure of objects being passed between frontend and API, the database may need multiple tables to store a single shape. 
+## Setup environment
 
-### 2.  DB Creation and Migrations
+First, create a .env file with all the required environment variables:
 
-Now that you have the structure of the databse outlined, it is time to create the database and migrations. Add the npm packages dotenv and db-migrate that we used in the course and setup your Postgres database. If you get stuck, you can always revisit the database lesson for a reminder. 
+POSTGRES_PASSWORD="password"
+POSTGRES_USER="postgres"
+POSTGRES_DB="books"
+DATABASE_URL="postgresql://postgres:password@localhost:5432/books"
+SALT_ROUNDS="10"
+JWT_SECRET="thisistopsecret"
 
-You must also ensure that any sensitive information is hashed with bcrypt. If any passwords are found in plain text in your application it will not pass.
+Next, start the Postgres server on Docker:
 
-### 3. Models
+docker-compose up
+Now, check if Postgres has the database store, if not create it:
 
-Create the models for each database table. The methods in each model should map to the endpoints in `REQUIREMENTS.md`. Remember that these models should all have test suites and mocks.
+docker exec -it <postgres_container_id> bash
 
-### 4. Express Handlers
+psql -U postgres
 
-Set up the Express handlers to route incoming requests to the correct model method. Make sure that the endpoints you create match up with the enpoints listed in `REQUIREMENTS.md`. Endpoints must have tests and be CORS enabled. 
+\l
 
-### 5. JWTs
+If "books" database is not present
 
-Add JWT functionality as shown in the course. Make sure that JWTs are required for the routes listed in `REQUIUREMENTS.md`.
+create database books;
+Next, you need to run the database migrations:
 
-### 6. QA and `README.md`
+db-migrate up
 
-Before submitting, make sure that your project is complete with a `README.md`. Your `README.md` must include instructions for setting up and running your project including how you setup, run, and connect to your database. 
+## Running the application
 
-Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
+Use the following command to run the application in using node:
+
+npm run start
+The application will run on http://localhost:3000/.
+
+Note: i let POST "/users" WITHOUT token required to create new user to help you to authenticate.
+
+## Running the tests
+
+Use the following command to run the unit tests:
+
+npm run test
+
+You may also use the Postman collection present in the repository for testing.
