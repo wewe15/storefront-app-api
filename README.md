@@ -25,6 +25,8 @@ First, create a .env file with all the required environment variables:
 - POSTGRES_PASSWORD="password"
 - POSTGRES_USER="postgres"
 - POSTGRES_DB="books"
+- POSTGRES_TEST_DB="books_test"
+- POSTGRES_PORT="5432"
 - DATABASE_URL="postgresql://postgres:password@localhost:5432/books"
 - SALT_ROUNDS="10"
 - JWT_SECRET="thisistopsecret"
