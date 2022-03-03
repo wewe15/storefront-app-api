@@ -8,7 +8,6 @@ These instructions will get you a copy of the project up and running on your loc
 
 You need the following modules and dependencies installed to run this project:
 
-- docker-compose # To run the Postgres database on Docker
 - node # To run the application
 - npm # For dependency management
 
@@ -33,7 +32,7 @@ First, create a .env file with all the required environment variables:
 
 Next, start the Postgres server on Docker:
 
-docker-compose up
+docker-compose up -d
 
 Next, you need to run the database migrations:
 
