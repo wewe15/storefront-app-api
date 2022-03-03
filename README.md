@@ -34,17 +34,7 @@ First, create a .env file with all the required environment variables:
 Next, start the Postgres server on Docker:
 
 docker-compose up
-Now, check if Postgres has the database store, if not create it:
 
-docker exec -it <postgres_container_id> bash
-
-psql -U postgres
-
-\l
-
-If "books" database is not present
-
-create database books;
 Next, you need to run the database migrations:
 
 db-migrate up
