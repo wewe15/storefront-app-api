@@ -8,6 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 You need the following modules and dependencies installed to run this project:
 
+- docker # to run database on docker
 - node # To run the application
 - npm # For dependency management
 
@@ -34,15 +35,29 @@ Next, start the Postgres server on Docker:
 
 docker-compose up -d
 
+Now, check if Postgres has the database books & books_test, if not create it:
+
+docker exec -it <postgres_container_id> bash
+
+psql -U postgres
+
+\l
+
+create database books;
+create database books_test;
+
 Next, you need to run the database migrations:
 
 db-migrate up
+
+Now, database run on port 5432.
 
 ## Running the application
 
 Use the following command to run the application in using node:
 
 npm run start
+
 The application will run on http://localhost:3000/.
 
 Note: i let POST "/users" WITHOUT token required to create new user to help you to authenticate.
