@@ -35,13 +35,15 @@ Next, start the Postgres server on Docker:
 
 docker-compose up -d
 
-Now, check if Postgres has the database books & books_test, if not create it:
+Or you can user postgres local to create database books & books_test:
 
-docker exec -it <postgres_container_id> bash
+sudo -u postgres psql
 
-psql -U postgres
+\password
 
-\l
+Enter password: password
+
+then
 
 create database books;
 create database books_test;
