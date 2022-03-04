@@ -9,13 +9,23 @@ const store = new UserModel();
   
 
 const index = async (_req: Request, res: Response) => {
-    const users = await store.index();
-    res.json(users);
+    try{
+        const users = await store.index();
+        res.json(users);
+    } catch (err){
+        res.status(400).json(err);
+    }
+    
 }
 
 const show = async (req: Request, res: Response) => {
-   const user = await store.show(req.params.id);
-   res.json(user);
+    try{
+        const user = await store.show(req.params.id);
+        res.json(user);
+    } catch (err){
+        res.status(400).json(err)
+    }
+   
 }
 
 const create = async (req: Request, res: Response) => {
@@ -30,7 +40,7 @@ const create = async (req: Request, res: Response) => {
 
         const newUser = await store.create(user)
         res.json(newUser)
-    } catch(err) {
+    } catch (err) {
         res.status(400);
         res.json(err);
     }
@@ -48,14 +58,19 @@ const authenticate = async (req: Request, res: Response) => {
        }
        res.json({...user, token});
     } catch (err){
-        res.status(400);
+        res.status(401);
         res.json(err);
     }
 }
 
 const destroy = async (req: Request, res: Response) => {
-    const deleted = await store.delete(req.params.id);
-    res.json(deleted);
+    try {
+        const deleted = await store.delete(req.params.id);
+        res.json(deleted);
+    } catch (err){
+        res.status(400).json(err);
+    }
+    
 }
 
 const userRoutes = (app: express.Application) => {

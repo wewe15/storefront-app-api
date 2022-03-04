@@ -6,13 +6,23 @@ import validateToken from '../middlewares/authentication';
 const store = new OrderModel();
 
 const index = async (_req: Request, res: Response) => {
-    const orders = await store.index()
-    res.json(orders)
+    try{
+        const orders = await store.index()
+        res.json(orders)
+    } catch (err){
+        res.status(400).json(err)
+    }
+    
 }
 
 const show = async (req: Request, res: Response) => {
-    const order = await store.show(req.params.id)
-    res.json(order)
+    try{
+        const order = await store.show(req.params.id)
+        res.json(order)
+    } catch (err){
+        res.status(400).json(err);
+    }
+    
 }
 
 const create = async (req: Request, res: Response) => {
@@ -45,8 +55,13 @@ const addProduct = async (req: Request, res: Response) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-    const deleted = await store.delete(req.params.id)
-    res.json(deleted)
+    try{
+        const deleted = await store.delete(req.params.id)
+        res.json(deleted)
+    } catch (err){
+        res.status(400).json(err);
+    }
+    
 }
 
 const OrderRoutes = (app: express.Application) => {
